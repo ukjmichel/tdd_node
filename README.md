@@ -1,49 +1,144 @@
-## Command List
+# Environment Configuration
 
-| Command            | Description        |
-|--------------------|--------------------|
-| `npm run build`    | Build the project  |
-| `npm run start`    | Start the project  |
-| `npm run dev`      | Start in dev mode  |
-| `npm run restart`  | Restart dev server |
-| `npm run clean`    | Clean pm2 process  |
+This project uses environment variables for configuration. Create a `.env` file in the root directory with the following variables:
+
+### Required Environment Variables
+
+The application requires the following environment variables to be set in your `.env` file:
+
+```
+# Application Environment
+NODE_ENV=development    # Use 'production' for production environment
+PORT=3000               # Port the Node.js application will listen on
+
+# Database Configuration
+DB_HOST=mysql           # Database host (use 'mysql' for Docker setup)
+DB_PORT=3306            # Database port inside the container
+DB_USER=root            # Database user
+DB_PASSWORD=root_password  # Database password (change this in production!)
+DB_NAME=mysql_db        # Database name
+
+# MySQL Configuration
+MYSQL_ROOT_PASSWORD=root_password  # Must match DB_PASSWORD
+MYSQL_DATABASE=mysql_db            # Must match DB_NAME
+
+# External Ports (for host machine)
+HOST_APP_PORT=3000      # Port exposed on host for the application
+HOST_MYSQL_PORT=3312    # Port exposed on host for MySQL
+```
+
+### Environment Configurations for Different Environments
+
+You can maintain different environment configurations for different environments:
+
+1. **Development**: Use the values shown above
+2. **Testing**: Create a `.env.test` file with appropriate test values
+3. **Production**: Create a `.env.prod` file with secure passwords and appropriate settings
+
+**Example for production:**
+
+```
+NODE_ENV=production
+PORT=3000
+DB_HOST=mysql
+DB_PORT=3306
+DB_USER=production_user
+DB_PASSWORD=strong_secure_password
+DB_NAME=production_db
+MYSQL_ROOT_PASSWORD=strong_secure_password
+MYSQL_DATABASE=production_db
+HOST_APP_PORT=80
+HOST_MYSQL_PORT=3306
+```
+
+### Using Environment Variables
+
+The application uses the `dotenv` package to load these variables. You don't need to modify any code to use them - just reference them in your code via `process.env.VARIABLE_NAME`.
+
+### Security Notes
+
+- Never commit your `.env` file to version control
+- Use different passwords for different environments
+- In production, use long, complex passwords
+- Consider using a secrets management system for production deployments
 
 
-## PM2 Commands Table
+# Docker and Docker Compose Commands Reference
 
-This table includes a list of common PM2 commands for managing your Node.js applications.
+## NPM Commands
 
-| **Command**                        | **Description**                                                                          |
-| ---------------------------------- | ---------------------------------------------------------------------------------------- |
-| `pm2 start <app-file>`             | Start a new application with PM2.                                                        |
-| `pm2 stop <app-name-or-id>`        | Stop a running application.                                                              |
-| `pm2 restart <app-name-or-id>`     | Restart a running application.                                                           |
-| `pm2 delete <app-name-or-id>`      | Remove an application from PM2's process list.                                           |
-| `pm2 list`                         | List all processes currently managed by PM2.                                             |
-| `pm2 status`                       | Show a brief overview of the processes, including their status, CPU, and memory usage.   |
-| `pm2 logs <app-name-or-id>`        | Show logs for a specific application.                                                    |
-| `pm2 monit`                        | Monitor the processes in real-time (CPU and memory usage).                               |
-| `pm2 save`                         | Save the current process list, so PM2 can resurrect processes on system restart.         |
-| `pm2 startup`                      | Generate and configure a startup script to run PM2 on system boot.                       |
-| `pm2 reload <app-name-or-id>`      | Reload an application with zero downtime.                                                |
-| `pm2 scale <app-name> <instances>` | Scale the number of instances of an application (useful for load balancing).             |
-| `pm2 restart all`                  | Restart all applications managed by PM2.                                                 |
-| `pm2 stop all`                     | Stop all running applications.                                                           |
-| `pm2 delete all`                   | Delete all applications from PM2's process list.                                         |
-| `pm2 dump <filename>`              | Export the current process list to a file for later restoration.                         |
-| `pm2 resurrect`                    | Restore applications from a dump file created by `pm2 dump`.                             |
-| `pm2 update`                       | Update PM2 to the latest version.                                                        |
-| `pm2 env`                          | Show environment variables for the current application.                                  |
-| `pm2 kill`                         | Kill all processes managed by PM2 and shut down PM2 itself.                              |
-| `pm2 describe <app-name-or-id>`    | Show detailed information about a specific application.                                  |
-| `pm2 pid <app-name-or-id>`         | Get the Process ID (PID) of the application.                                             |
-| `pm2 restart <app-name> --watch`   | Restart an application with watch mode enabled (restarts automatically on file changes). |
-| `pm2 reload all`                   | Reload all applications (zero-downtime).                                                 |
-| `pm2 logs --lines <num>`           | Show the last `<num>` lines of logs for all applications.                                |
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Build the project |
+| `npm run start` | Start the project |
+| `npm run deploy` | Build and start the project|
+| `npm run test` | Run tests |
+| `npm run dev` | Start in dev mode |
+| `npm run restart` | Restart dev server |
+| `npm run clean` | Clean pm2 process |
 
-### Example Usage
+## Basic Commands
 
-- **Start an app**:
-  ```bash
-  pm2 start app.js
-  ```
+| Command | Description |
+|---------|-------------|
+| `docker compose up` | Start containers defined in docker-compose.yml |
+| `docker compose up -d` | Start containers in detached (background) mode |
+| `docker compose up --build` | Start containers after building/rebuilding images |
+| `docker compose down` | Stop and remove containers, networks, and volumes |
+| `docker compose logs` | View output from all containers |
+| `docker compose logs -f` | Follow log output from all containers |
+| `docker compose logs app` | View logs for only the app service |
+| `docker compose stop` | Stop containers without removing them |
+| `docker compose start` | Start previously stopped containers |
+| `docker compose restart` | Restart all services |
+| `docker compose ps` | List containers and their status |
+
+## Container Execution
+
+| Command | Description |
+|---------|-------------|
+| `docker compose exec app sh` | Open a shell in the app container |
+| `docker compose exec mysql sh` | Open a shell in the MySQL container |
+| `docker compose exec app node -v` | Check Node.js version in the app container |
+| `docker compose exec mysql mysql -u root -p` | Access MySQL CLI |
+
+## PM2 Management via Docker
+
+| Command | Description |
+|---------|-------------|
+| `docker compose exec app pm2 list` | List all PM2 processes |
+| `docker compose exec app pm2 show api` | Show detailed information about the API process |
+| `docker compose exec app pm2 logs` | Show PM2 logs |
+| `docker compose exec app pm2 logs api` | Show logs for the API process only |
+| `docker compose exec app pm2 restart all` | Restart all PM2 processes |
+| `docker compose exec app pm2 stop all` | Stop all PM2 processes |
+| `docker compose exec app pm2 start all` | Start all PM2 processes |
+| `docker compose exec app pm2 reload all` | Zero-downtime reload of all processes |
+| `docker compose exec app pm2 monit` | Monitor PM2 processes (requires interactive terminal) |
+
+## Docker Image Management
+
+| Command | Description |
+|---------|-------------|
+| `docker images` | List all Docker images |
+| `docker rmi node_base_config-app` | Remove the app image |
+| `docker compose build app` | Build only the app service |
+| `docker compose pull` | Pull the latest versions of all images |
+
+## Volume Management
+
+| Command | Description |
+|---------|-------------|
+| `docker volume ls` | List all volumes |
+| `docker volume inspect node_base_config_mysql_data` | Show details about the MySQL data volume |
+| `docker volume rm node_base_config_mysql_data` | Remove the MySQL data volume (destructive!) |
+
+## Development Workflow
+
+| Command | Description |
+|---------|-------------|
+| `docker compose up -d` | Start the environment in the background |
+| `docker compose exec app npm install new-package` | Install a new npm package |
+| `docker compose exec app npm run build` | Run the build script |
+| `docker compose exec app npm test` | Run tests |
+| `docker compose exec app npm run dev` | Run the dev script |
