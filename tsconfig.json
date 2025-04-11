@@ -9,6 +9,6 @@
     "skipLibCheck": true,
     "moduleResolution": "node"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/config/swagger.ts"],
   "exclude": ["node_modules"]
 }
