@@ -1,16 +1,18 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript'; // Use sequelize-typescript
 import dotenv from 'dotenv';
+import { UserModel } from '../models/user.model'; // Import your models
 
-dotenv.config();
+dotenv.config(); // Load environment variables
 
-const sequelize = new Sequelize({
+// Initialize Sequelize with sequelize-typescript
+export const sequelize = new Sequelize({
   dialect: 'mysql',
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  models: [],
+  models: [UserModel], // Register all models here
   logging: false,
   pool: {
     max: 10,
@@ -20,4 +22,8 @@ const sequelize = new Sequelize({
   },
 });
 
-export default sequelize;
+// Ensure the models are synchronized
+sequelize
+  .sync()
+  .then(() => console.log('Database synced!'))
+  .catch((err) => console.error('Error syncing database:', err));
