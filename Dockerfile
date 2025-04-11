@@ -3,6 +3,9 @@ FROM node:23-slim
 # Create app directory
 WORKDIR /usr/src/app
 
+# Install curl 
+RUN apt update && apt install -y curl
+
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
