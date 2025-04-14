@@ -2,10 +2,10 @@
 import express from 'express';
 import { sequelize } from '../config/db';
 import { setupSwagger } from '../config/swagger';
-import userRoutes from './user.routes';
+import userRouter from './user.routes';
+import authRouter from './auth.routes';
 
-
-const app = express(); 
+const app = express();
 const port = process.env.PORT || 3000;
 
 setupSwagger(app);
@@ -29,7 +29,9 @@ app.get('/', (req, res) => {
   res.send('Hello, Express with TypeScript!');
 });
 
-app.use('/api/users', userRoutes); 
+app.use('/api/users', userRouter);
+
+app.use('/api/auth', authRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

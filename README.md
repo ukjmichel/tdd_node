@@ -2,7 +2,7 @@
 
 This project uses environment variables for configuration. Create a `.env` file in the root directory with the following variables:
 
-### Required Environment Variables
+t ### Required Environment Variables
 
 The application requires the following environment variables to be set in your `.env` file:
 
@@ -62,83 +62,82 @@ The application uses the `dotenv` package to load these variables. You don't nee
 - In production, use long, complex passwords
 - Consider using a secrets management system for production deployments
 
-
 # Docker and Docker Compose Commands Reference
 
 ## NPM Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run build` | Build the project |
-| `npm run start` | Start the project |
-| `npm run deploy` | Build and start the project|
-| `npm run test` | Run tests |
-| `npm run dev` | Start in dev mode |
-| `npm run restart` | Restart dev server |
-| `npm run clean` | Clean pm2 process |
+| Command           | Description                 |
+| ----------------- | --------------------------- |
+| `npm run build`   | Build the project           |
+| `npm run start`   | Start the project           |
+| `npm run deploy`  | Build and start the project |
+| `npm run test`    | Run tests                   |
+| `npm run dev`     | Start in dev mode           |
+| `npm run restart` | Restart dev server          |
+| `npm run clean`   | Clean pm2 process           |
 
 ## Basic Commands
 
-| Command | Description |
-|---------|-------------|
-| `docker compose up` | Start containers defined in docker-compose.yml |
-| `docker compose up -d` | Start containers in detached (background) mode |
+| Command                     | Description                                       |
+| --------------------------- | ------------------------------------------------- |
+| `docker compose up`         | Start containers defined in docker-compose.yml    |
+| `docker compose up -d`      | Start containers in detached (background) mode    |
 | `docker compose up --build` | Start containers after building/rebuilding images |
-| `docker compose down` | Stop and remove containers, networks, and volumes |
-| `docker compose logs` | View output from all containers |
-| `docker compose logs -f` | Follow log output from all containers |
-| `docker compose logs app` | View logs for only the app service |
-| `docker compose stop` | Stop containers without removing them |
-| `docker compose start` | Start previously stopped containers |
-| `docker compose restart` | Restart all services |
-| `docker compose ps` | List containers and their status |
+| `docker compose down`       | Stop and remove containers, networks, and volumes |
+| `docker compose logs`       | View output from all containers                   |
+| `docker compose logs -f`    | Follow log output from all containers             |
+| `docker compose logs app`   | View logs for only the app service                |
+| `docker compose stop`       | Stop containers without removing them             |
+| `docker compose start`      | Start previously stopped containers               |
+| `docker compose restart`    | Restart all services                              |
+| `docker compose ps`         | List containers and their status                  |
 
 ## Container Execution
 
-| Command | Description |
-|---------|-------------|
-| `docker compose exec app sh` | Open a shell in the app container |
-| `docker compose exec mysql sh` | Open a shell in the MySQL container |
-| `docker compose exec app node -v` | Check Node.js version in the app container |
-| `docker compose exec mysql mysql -u root -p` | Access MySQL CLI |
+| Command                                      | Description                                |
+| -------------------------------------------- | ------------------------------------------ |
+| `docker compose exec app sh`                 | Open a shell in the app container          |
+| `docker compose exec mysql sh`               | Open a shell in the MySQL container        |
+| `docker compose exec app node -v`            | Check Node.js version in the app container |
+| `docker compose exec mysql mysql -u root -p` | Access MySQL CLI                           |
 
 ## PM2 Management via Docker
 
-| Command | Description |
-|---------|-------------|
-| `docker compose exec app pm2 list` | List all PM2 processes |
-| `docker compose exec app pm2 show api` | Show detailed information about the API process |
-| `docker compose exec app pm2 logs` | Show PM2 logs |
-| `docker compose exec app pm2 logs api` | Show logs for the API process only |
-| `docker compose exec app pm2 restart all` | Restart all PM2 processes |
-| `docker compose exec app pm2 stop all` | Stop all PM2 processes |
-| `docker compose exec app pm2 start all` | Start all PM2 processes |
-| `docker compose exec app pm2 reload all` | Zero-downtime reload of all processes |
-| `docker compose exec app pm2 monit` | Monitor PM2 processes (requires interactive terminal) |
+| Command                                   | Description                                           |
+| ----------------------------------------- | ----------------------------------------------------- |
+| `docker compose exec app pm2 list`        | List all PM2 processes                                |
+| `docker compose exec app pm2 show api`    | Show detailed information about the API process       |
+| `docker compose exec app pm2 logs`        | Show PM2 logs                                         |
+| `docker compose exec app pm2 logs api`    | Show logs for the API process only                    |
+| `docker compose exec app pm2 restart all` | Restart all PM2 processes                             |
+| `docker compose exec app pm2 stop all`    | Stop all PM2 processes                                |
+| `docker compose exec app pm2 start all`   | Start all PM2 processes                               |
+| `docker compose exec app pm2 reload all`  | Zero-downtime reload of all processes                 |
+| `docker compose exec app pm2 monit`       | Monitor PM2 processes (requires interactive terminal) |
 
 ## Docker Image Management
 
-| Command | Description |
-|---------|-------------|
-| `docker images` | List all Docker images |
-| `docker rmi node_base_config-app` | Remove the app image |
-| `docker compose build app` | Build only the app service |
-| `docker compose pull` | Pull the latest versions of all images |
+| Command                           | Description                            |
+| --------------------------------- | -------------------------------------- |
+| `docker images`                   | List all Docker images                 |
+| `docker rmi node_base_config-app` | Remove the app image                   |
+| `docker compose build app`        | Build only the app service             |
+| `docker compose pull`             | Pull the latest versions of all images |
 
 ## Volume Management
 
-| Command | Description |
-|---------|-------------|
-| `docker volume ls` | List all volumes |
-| `docker volume inspect node_base_config_mysql_data` | Show details about the MySQL data volume |
-| `docker volume rm node_base_config_mysql_data` | Remove the MySQL data volume (destructive!) |
+| Command                                             | Description                                 |
+| --------------------------------------------------- | ------------------------------------------- |
+| `docker volume ls`                                  | List all volumes                            |
+| `docker volume inspect node_base_config_mysql_data` | Show details about the MySQL data volume    |
+| `docker volume rm node_base_config_mysql_data`      | Remove the MySQL data volume (destructive!) |
 
 ## Development Workflow
 
-| Command | Description |
-|---------|-------------|
-| `docker compose up -d` | Start the environment in the background |
-| `docker compose exec app npm install new-package` | Install a new npm package |
-| `docker compose exec app npm run build` | Run the build script |
-| `docker compose exec app npm test` | Run tests |
-| `docker compose exec app npm run dev` | Run the dev script |
+| Command                                           | Description                             |
+| ------------------------------------------------- | --------------------------------------- |
+| `docker compose up -d`                            | Start the environment in the background |
+| `docker compose exec app npm install new-package` | Install a new npm package               |
+| `docker compose exec app npm run build`           | Run the build script                    |
+| `docker compose exec app npm test`                | Run tests                               |
+| `docker compose exec app npm run dev`             | Run the dev script                      |

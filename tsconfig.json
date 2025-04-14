@@ -33,7 +33,8 @@
   },
   "include": [
     "src/**/*", // Include all TypeScript files in the src directory
-    "src/config/swagger.ts" // Explicitly include this config file
+    "src/config/swagger.ts", // Explicitly include this config file
+    "types"
   ],
   "exclude": [
     "node_modules" // Exclude dependencies

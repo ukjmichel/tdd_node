@@ -1,7 +1,12 @@
-// src/models/user.model.ts
-import { Column, Model, Table, DataType } from 'sequelize-typescript';
+import {
+  Column,
+  Model,
+  Table,
+  DataType,
+  BeforeCreate,
+  BeforeUpdate,
+} from 'sequelize-typescript';
 import bcrypt from 'bcrypt';
-
 import { Optional } from 'sequelize';
 
 interface UserAttributes {
@@ -22,20 +27,43 @@ class UserModel
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
     primaryKey: true,
+    unique: true,
   })
   public id!: string;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    validate: {
+      len: [2, 20],
+      is: /^[a-zA-Z0-9]+$/,
+    },
+  })
   public name!: string;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
+  })
   public email!: string;
 
   @Column(DataType.STRING)
   public password!: string;
 
   public async validatePassword(password: string): Promise<boolean> {
-    return bcrypt.compare(password, this.password);
+    return await bcrypt.compare(password, this.password);
+  }
+
+  @BeforeCreate
+  @BeforeUpdate
+  static async hashPassword(instance: UserModel) {
+    if (instance.changed('password')) {
+      const salt = await bcrypt.genSalt(10);
+      instance.password = await bcrypt.hash(instance.password, salt);
+    }
   }
 }
 
