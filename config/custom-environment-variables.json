@@ -1,0 +1,26 @@
+{
+  "env": "NODE_ENV",
+
+  "server": {
+    "port": "PORT",
+    "hostPort": "HOST_APP_PORT"
+  },
+
+  "database": {
+    "host": "DB_HOST",
+    "port": "DB_PORT",
+    "user": "DB_USER",
+    "password": "DB_PASSWORD",
+    "name": "DB_NAME"
+  },
+
+  "mysql": {
+    "rootPassword": "MYSQL_ROOT_PASSWORD",
+    "database": "MYSQL_DATABASE",
+    "hostPort": "HOST_MYSQL_PORT"
+  },
+
+  "jwt": {
+    "secret": "JWT_SECRET"
+  }
+}

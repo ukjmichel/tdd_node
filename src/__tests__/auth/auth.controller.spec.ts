@@ -1,10 +1,10 @@
+// src/__tests__/auth/auth.controller.spec.ts
 import {
   loginController,
   verifyTokenController,
 } from '../../controllers/auth.controller';
 import * as authService from '../../services/auth.service';
 import { Request, Response } from 'express';
-import { UserPayload } from '../../interfaces/user.interface';
 
 describe('Auth Controller', () => {
   let req: Partial<Request>;
@@ -39,6 +39,10 @@ describe('Auth Controller', () => {
 
       await loginController(req as Request, res as Response);
 
+      expect(authService.login).toHaveBeenCalledWith(
+        'test@example.com',
+        'wrong'
+      );
       expect(statusMock).toHaveBeenCalledWith(401);
       expect(jsonMock).toHaveBeenCalledWith({
         message: 'Invalid email or password.',
@@ -52,12 +56,17 @@ describe('Auth Controller', () => {
         user: {
           id: 'uuid-123',
           email: 'test@example.com',
-          name: 'Test User', // Add the missing property
+          name: 'Test User',
+          isVerified: true,
         },
       });
 
       await loginController(req as Request, res as Response);
 
+      expect(authService.login).toHaveBeenCalledWith(
+        'test@example.com',
+        'correct'
+      );
       expect(statusMock).toHaveBeenCalledWith(200);
       expect(jsonMock).toHaveBeenCalledWith({
         message: 'Login successful',
@@ -65,7 +74,8 @@ describe('Auth Controller', () => {
         user: {
           id: 'uuid-123',
           email: 'test@example.com',
-          name: 'Test User', // Match in the expectation too
+          name: 'Test User',
+          isVerified: true,
         },
       });
     });
@@ -76,6 +86,10 @@ describe('Auth Controller', () => {
 
       await loginController(req as Request, res as Response);
 
+      expect(authService.login).toHaveBeenCalledWith(
+        'test@example.com',
+        'error'
+      );
       expect(statusMock).toHaveBeenCalledWith(500);
       expect(jsonMock).toHaveBeenCalledWith({
         message: 'Internal server error.',
@@ -111,7 +125,8 @@ describe('Auth Controller', () => {
       jest.spyOn(authService, 'verifyToken').mockReturnValue({
         id: 'uuid-123',
         email: 'test@example.com',
-        name: 'Test User', // Add missing properties to match UserPayload interface
+        name: 'Test User',
+        isVerified: true,
       });
 
       verifyTokenController(req as Request, res as Response);
@@ -122,7 +137,8 @@ describe('Auth Controller', () => {
         decoded: {
           id: 'uuid-123',
           email: 'test@example.com',
-          name: 'Test User', // Match in the expectation too
+          name: 'Test User',
+          isVerified: true,
         },
       });
     });

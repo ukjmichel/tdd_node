@@ -3,9 +3,7 @@ export interface UserInterface {
   name: string;
   email: string;
   password: string;
+  isVerified: boolean; 
 }
-export interface UserPayload {
-  id: string;
-  name: string;
-  email: string;
-}
+
+export type SafeUser = Omit<UserInterface, 'password'>;

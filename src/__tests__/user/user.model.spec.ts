@@ -57,9 +57,20 @@ describe('UserModel', () => {
     expect(user.id).toBeDefined();
     expect(user.name).toBe(userData.name);
     expect(user.email).toBe(userData.email);
+    expect(user.isVerified).toBe(false);
     // Verify password was hashed
     expect(user.password).toBe(`hashed_${userData.password}`);
     expect(bcrypt.hash).toHaveBeenCalledWith(userData.password, 'salt');
+  });
+
+  it('should set isVerified to false by default', async () => {
+    const user = await UserModel.create({
+      name: 'verifytest',
+      email: 'verify@example.com',
+      password: 'secure123',
+    });
+
+    expect(user.isVerified).toBe(false);
   });
 
   it('should fail with invalid name format', async () => {

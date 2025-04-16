@@ -66,6 +66,7 @@ describe('Auth Router Tests', () => {
         id: '123',
         email: 'test@example.com',
         name: 'Test User',
+        isVerified: false,
       };
       const mockToken = 'jwt.token.here';
       mockAuthService.login.mockResolvedValue({

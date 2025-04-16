@@ -1,0 +1,26 @@
+{
+  "env": "development",
+
+  "server": {
+    "port": 3000,
+    "hostPort": 3000
+  },
+
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "",
+    "name": "mysql_db"
+  },
+
+  "mysql": {
+    "rootPassword": "",
+    "database": "mysql_db",
+    "hostPort": 3312
+  },
+
+  "jwt": {
+    "secret": ""
+  }
+}

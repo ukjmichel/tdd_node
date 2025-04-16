@@ -19,7 +19,7 @@ export const loginController = async (
   }
 
   try {
-    const result = await login(name, email, password);
+    const result = await login(email, password);
 
     if (!result) {
       return res.status(401).json({ message: 'Invalid email or password.' });

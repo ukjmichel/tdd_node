@@ -1,29 +1,29 @@
+# Use official Node.js image
 FROM node:23-slim
 
-# Create app directory
+# Set working directory inside the container
 WORKDIR /usr/src/app
 
-# Install curl 
+# Install curl (if you really need it)
 RUN apt update && apt install -y curl
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# Copy package.json and package-lock.json first (for better Docker caching)
 COPY package*.json ./
 
-# Install dependencies
+# Install app dependencies
 RUN npm install
 
 # Install PM2 globally
-RUN npm install pm2 -g
+RUN npm install -g pm2
 
-# Bundle app source
+# Copy the rest of the application (including your src/ folder and tsconfig.json)
 COPY . .
 
-# Build TypeScript code
+# Compile TypeScript code
 RUN npm run build
 
-# Expose the port your app runs on
+# Expose the app port
 EXPOSE 3000
 
-# Use PM2 runtime to start the built app directly
-CMD [ "pm2-runtime", "dist/server.js" ]
+# Start the built server with PM2
+CMD ["pm2-runtime", "dist/server.js"]

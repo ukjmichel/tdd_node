@@ -1,16 +1,18 @@
-// pm2-wrapper.js
 require('ts-node').register();
-require('./src/server.ts');
 
-// Handle shutdown gracefully before loading server
+const { loadEnv } = require('./src/config/loadenv.ts');
+
+// ✅ Load env vars based on NODE_ENV
+loadEnv();
+
+// ✅ Graceful shutdown
 process.on('SIGINT', () => {
-  console.log('Received SIGINT, shutting down gracefully');
-  // Your server will have a chance to clean up in its own SIGINT handler
+  console.log('🛑 Received SIGINT, shutting down gracefully...');
   setTimeout(() => {
-    console.log('Clean exit from PM2 wrapper');
+    console.log('✅ Clean exit from PM2 wrapper');
     process.exit(0);
   }, 5000);
 });
 
-// Load the server
+// ✅ Start your app
 require('./src/server.ts');

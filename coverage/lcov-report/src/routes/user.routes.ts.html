@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -118,19 +118,17 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,13 +140,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,89 +164,70 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/routes/user.routes.ts
-import { Router } from 'express';
-import { handleCreateUser } from '../controllers/user.controller';
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express';
+import * as userController from '../controllers/user.controller';
+import { validateRequiredFields } from '../middlewares/validateRequiredFields';
+import handleValidationErrors from '../middlewares/handleValidationErrors';
+import { authenticateJWT } from '../middlewares/authenticateJWT';
+import { body } from 'express-validator';
 &nbsp;
-const userRouter = Router();
+const router = express.Router();
 &nbsp;
-/**
- * @swagger
- * /users:
- *   post:
- *     summary: Create a new user
- *     description: Creates a new user in the system with the provided name, email, and password.
- *     operationId: createUser
- *     tags:
- *       - Users
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: The user's name
- *                 example: Alice
- *               email:
- *                 type: string
- *                 description: The user's email address
- *                 example: alice@example.com
- *               password:
- *                 type: string
- *                 description: The user's password
- *                 example: Secure123!
- *     responses:
- *       201:
- *         description: User created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                   description: The unique ID of the newly created user
- *                   example: 123e4567-e89b-12d3-a456-426614174000
- *                 name:
- *                   type: string
- *                   description: The user's name
- *                   example: Alice
- *                 email:
- *                   type: string
- *                   description: The user's email
- *                   example: alice@example.com
- *       400:
- *         description: Bad request, validation failed
- *       500:
- *         description: Internal server error
- */
-userRouter.post('/', handleCreateUser);
+// Create user route (public - no authentication required)
+router.post(
+  '/',
+  [
+    body('name').trim().notEmpty().withMessage('Name is required'),
+    body('email').trim().isEmail().withMessage('Valid email is required'),
+    body('password').trim().notEmpty().withMessage('Password is required'),
+    handleValidationErrors,
+  ],
+  userController.handleCreateUser
+);
 &nbsp;
-export default userRouter;
+// Search users route - must come before /:id route for precedence
+router.get('/search', authenticateJWT, userController.handleSearchUsers);
+&nbsp;
+// Verify user route
+router.patch('/:id/verify', userController.handleVerifyUser);
+&nbsp;
+// Change password route
+router.put(
+  '/:id/password',
+  authenticateJWT,
+  [
+    body('currentPassword')
+      .trim()
+      .notEmpty()
+      .withMessage('Current password is required'),
+    body('newPassword')
+      .trim()
+      .notEmpty()
+      .withMessage('New password is required'),
+    handleValidationErrors,
+  ],
+  userController.handleChangePassword
+);
+&nbsp;
+// Get user by ID
+router.get('/:id', authenticateJWT, userController.handleGetUser);
+&nbsp;
+// Update user
+router.put('/:id', authenticateJWT, userController.handleUpdateUser);
+&nbsp;
+// Delete user
+router.delete('/:id', authenticateJWT, userController.handleDeleteUser);
+&nbsp;
+export default router;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -256,7 +235,7 @@ export default userRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-13T20:00:17.608Z
+                at 2025-04-15T21:06:45.966Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

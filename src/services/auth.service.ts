@@ -1,62 +1,63 @@
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/user.model';
-import { UserInterface, UserPayload } from '../interfaces/user.interface';
+import { UserInterface, SafeUser } from '../interfaces/user.interface';
+import { loadEnv } from '../config/loadenv';
 
-// Load secret from environment variable
-const JWT_SECRET = process.env.JWT_SECRET || 'your_default_secret'; // fallback for dev
+loadEnv();
+
+const JWT_SECRET = process.env.JWT_SECRET || 'default_secret_key';
 
 /**
- * Generate JWT token with safe user payload
+ * Génère un JWT à partir des données utilisateur (sans le mot de passe)
  */
 const generateToken = (user: UserInterface): string => {
-  const payload: UserPayload = {
+  const payload: SafeUser = {
     id: user.id,
     name: user.name,
     email: user.email,
+    isVerified: user.isVerified,
   };
 
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 };
 
 /**
- * Verify JWT token and return decoded payload or null
+ * Vérifie un token JWT et retourne les données de l'utilisateur s'il est valide
  */
-function verifyToken(token: string): UserPayload | null {
+function verifyToken(token: string): SafeUser | null {
   try {
-    return jwt.verify(token, JWT_SECRET) as UserPayload;
+    return jwt.verify(token, JWT_SECRET) as SafeUser;
   } catch (error) {
     return null;
   }
 }
 
 /**
- * Handle login by checking user credentials and returning token
+ * Connecte un utilisateur en vérifiant les identifiants, retourne un token et les infos sans mot de passe
  */
 async function login(
-  name: string = '',
   email: string = '',
   password: string = ''
 ): Promise<{
   token: string;
-  user: UserPayload;
+  user: SafeUser;
 } | null> {
-  const user = await UserModel.findOne({
-    where: { email: email },
-  });
-
+  const user = await UserModel.findOne({ where: { email } });
   if (!user) return null;
 
   const isValid = await user.validatePassword(password);
   if (!isValid) return null;
 
   const token = generateToken(user);
-  const safeUser: UserPayload = {
+  const safeUser: SafeUser = {
     id: user.id,
     name: user.name,
     email: user.email,
+    isVerified: user.isVerified,
   };
 
   return { token, user: safeUser };
 }
 
 export { login, verifyToken };
+``;

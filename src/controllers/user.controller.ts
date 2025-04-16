@@ -1,4 +1,3 @@
-// src/controllers/user.controller.ts
 import { Request, Response } from 'express';
 import {
   createUser,
@@ -16,25 +15,15 @@ export async function handleCreateUser(
 ): Promise<any> {
   const { name, email, password } = req.body;
 
-  // Check if all required fields are provided
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: 'Missing required fields' });
-  }
-
   try {
-    // Check if email is unique
     const emailIsUnique = await isEmailUnique(email);
     if (!emailIsUnique) {
       return res.status(400).json({ message: 'Email already exists' });
     }
 
-    // Create the user
     const user = await createUser(name, email, password);
-
-    // Respond with success
     return res.status(201).json({ user, message: 'User created successfully' });
   } catch (error) {
-    // Log the error and return a 500 status code
     console.error('User creation failed:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
@@ -43,13 +32,8 @@ export async function handleCreateUser(
 export async function handleGetUser(req: Request, res: Response): Promise<any> {
   const { id } = req.params;
 
-  if (!id) {
-    return res.status(400).json({ message: 'User ID is required' });
-  }
-
   try {
     const user = await getUserById(id);
-
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -68,11 +52,6 @@ export async function handleUpdateUser(
   const { id } = req.params;
   const { name, email } = req.body;
 
-  if (!id) {
-    return res.status(400).json({ message: 'User ID is required' });
-  }
-
-  // Ensure at least one field to update is provided
   if (!name && !email) {
     return res
       .status(400)
@@ -80,7 +59,6 @@ export async function handleUpdateUser(
   }
 
   try {
-    // If email is being updated, check if it's unique
     if (email) {
       const emailIsUnique = await isEmailUnique(email);
       if (!emailIsUnique) {
@@ -89,7 +67,6 @@ export async function handleUpdateUser(
     }
 
     const updatedUser = await updateUser(id, { name, email });
-
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -109,16 +86,6 @@ export async function handleChangePassword(
 ): Promise<any> {
   const { id } = req.params;
   const { currentPassword, newPassword } = req.body;
-
-  if (!id) {
-    return res.status(400).json({ message: 'User ID is required' });
-  }
-
-  if (!currentPassword || !newPassword) {
-    return res
-      .status(400)
-      .json({ message: 'Current password and new password are required' });
-  }
 
   try {
     const success = await changePassword(id, currentPassword, newPassword);
@@ -142,13 +109,8 @@ export async function handleDeleteUser(
 ): Promise<any> {
   const { id } = req.params;
 
-  if (!id) {
-    return res.status(400).json({ message: 'User ID is required' });
-  }
-
   try {
     const deleted = await deleteUser(id);
-
     if (!deleted) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -187,6 +149,28 @@ export async function handleSearchUsers(
     });
   } catch (error) {
     console.error('Error searching users:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export async function handleVerifyUser(
+  req: Request,
+  res: Response
+): Promise<any> {
+  const { id } = req.params;
+
+  try {
+    const user = await updateUser(id, { isVerified: true });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res
+      .status(200)
+      .json({ user, message: 'User verified successfully' });
+  } catch (error) {
+    console.error('Error verifying user:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }

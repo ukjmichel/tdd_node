@@ -1,18 +1,25 @@
-import { Sequelize } from 'sequelize-typescript'; // Use sequelize-typescript
-import dotenv from 'dotenv';
-import { UserModel } from '../models/user.model'; // Import your models
+import { Sequelize } from 'sequelize-typescript';
+import { UserModel } from '../models/user.model';
+import config from 'config';
 
-dotenv.config(); // Load environment variables
+// Load DB config from config module
+const dbConfig = config.get<{
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  name: string;
+}>('database');
 
-// Initialize Sequelize with sequelize-typescript
+// Initialize Sequelize with values from config
 export const sequelize = new Sequelize({
   dialect: 'mysql',
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  models: [UserModel], // Register all models here
+  host: dbConfig.host,
+  port: dbConfig.port,
+  username: dbConfig.user,
+  password: dbConfig.password,
+  database: dbConfig.name,
+  models: [UserModel],
   logging: false,
   pool: {
     max: 10,
@@ -22,8 +29,7 @@ export const sequelize = new Sequelize({
   },
 });
 
-// Ensure the models are synchronized
 sequelize
   .sync()
-  .then(() => console.log('Database synced!'))
-  .catch((err) => console.error('Error syncing database:', err));
+  .then(() => console.log('✅ Database synced!'))
+  .catch((err) => console.error('❌ Error syncing database:', err));

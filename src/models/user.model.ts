@@ -7,7 +7,7 @@ import {
   BeforeUpdate,
 } from 'sequelize-typescript';
 import bcrypt from 'bcrypt';
-import { Optional } from 'sequelize';
+import { BOOLEAN, Optional } from 'sequelize';
 
 interface UserAttributes {
   id: string;
@@ -52,6 +52,9 @@ class UserModel
 
   @Column(DataType.STRING)
   public password!: string;
+
+  @Column({ type: DataType.BOOLEAN, defaultValue: false })
+  public isVerified!: boolean;
 
   public async validatePassword(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password);
